@@ -28,7 +28,7 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+html { scroll-padding-top: 84px; }
 body {
   background: var(--bg);
   color: var(--fg);
@@ -352,7 +352,6 @@ footer .big { font-family: var(--f-display); font-weight: 900; text-transform: u
 footer p { color: var(--muted); max-width: 70ch; font-size: .95rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   .neon { animation: none; }
   * { transition-duration: .01ms !important; }
 }
@@ -739,8 +738,10 @@ footer p { color: var(--muted); max-width: 70ch; font-size: .95rem; }
       es.forEach(function (e) {
         if (e.isIntersecting) {
           links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id); });
-          var on = $('.links a.on');
-          if (on && on.scrollIntoView) { try { on.scrollIntoView({ block: 'nearest', inline: 'center' }); } catch (x) {} }
+          var on = $('.links a.on'), box = $('.links');
+          if (on && box && box.scrollWidth > box.clientWidth) {
+            box.scrollLeft = on.offsetLeft - (box.clientWidth - on.offsetWidth) / 2;
+          }
         }
       });
     }, { rootMargin: '-35% 0px -60% 0px' });
